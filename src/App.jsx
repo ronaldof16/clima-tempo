@@ -1,10 +1,9 @@
-
+import Home from "./componentes/Home"
 
 function App() {
-
   return (
     <>
-      <h1>Aplicação Clima-Tempo</h1>
+      <Home />
     </>
   )
 }
