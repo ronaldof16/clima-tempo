@@ -1,51 +1,74 @@
 import { useState } from 'react';
 
 import "./Home.css";
+import {fetchWeatherFromCity} from "../api";
 
 const Home = () => {
 
     const [cidade, setCidade] = useState("");
     const [informacoes, setInformacoes] = useState({});
+    const [loading, setLoading] = useState(false);
 
-    function handleChange(e) {
+    async function handleChange(e) {
         setCidade(e.target.value);
+        
     }
 
-    async function buscaClima() {
-        const resposta = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cidade}&units=metric&lang=pt_br&appid=${import.meta.env.VITE_KEY_OPEN_WATHER_MAP}`);
-        const data = await resposta.json();
-        console.log(data);
-        setInformacoes(data);
+    async function buscaClima () {
+        if(cidade === "") {
+            alert("É necessário informar uma cidade!");
+            setCidade("");
+            return; 
+        }
+
+        try {
+            setLoading(true);
+            let info = await fetchWeatherFromCity(cidade);
+            if (info.cod === "404") {
+                throw Error("Cidade não encontrada, verifique e digite novamente!");
+            } else {
+                setInformacoes(info);
+            }   
+        } catch (e) {
+            console.log(e.message);
+            alert(e.message);         
+        } finally {
+            setCidade("");
+            setLoading(false);
+        } 
     }
 
   return (
     <div className='container'>
-        <p className='titluo-descricao'>Pesquise o clima de qualquer cidade</p>
-        <div>
-            <input type="text" value={cidade} onChange={handleChange} placeholder='Digite a cidade'/>
-            <button onClick={buscaClima}>Pesquisar</button>
+        <div className='container-pesquisa'>
+            <p className='titulo-descricao'>Pesquise o clima de qualquer cidade</p>
+            <div className='pesquisa'>
+                <input type="text" value={cidade} onChange={handleChange} placeholder='Digite a cidade'/>
+                <button onClick={buscaClima}>Pesquisar</button>
+            </div>
         </div>
         
+        {loading && <p className='loading'>Carregando....</p>}
         {Object.keys(informacoes).length > 0  && (
-        <div>
+        <div className='container-informacoes'>
             <h1>{informacoes.name}</h1>
-            <div>
+            <div className='clima-info'>
                 <img src={`https://openweathermap.org/img/wn/${informacoes.weather[0].icon}@2x.png`} alt="" />
-                <p>{Math.round(informacoes.main.temp)}°C</p>
+                <p className='temperatura'>{Math.round(informacoes.main.temp)}°C</p>
             </div>
-            <h3>{informacoes.weather[0].description}</h3>
-            <div>
-                <div>
-                    <i class="fa-solid fa-droplet"></i>
+            <h3 className='descricao'>{informacoes.weather[0].description}</h3>
+            <div className='info-detalhes'>
+                <div className='info-humidade'>
+                    <i className="fa-solid fa-droplet"></i>
                     <div>
-                        <p>Humidade</p>
+                        <p className='text-bold'>Humidade</p>
                         <p>{informacoes.main.humidity}%</p>
                     </div>
                 </div>
-                <div>
-                    <p>ícone</p>
-                    <div>
+                <div className='info-vento'>
                     <i className="fa-solid fa-wind"></i>
+                    <div>
+                        <p className='text-bold'>Vento</p>
                         <p>{Math.round(informacoes.wind.speed)}km/h</p>
                     </div>
                 </div>
