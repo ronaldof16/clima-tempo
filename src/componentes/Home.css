@@ -45,6 +45,13 @@
     background-color: rgb(4, 57, 83);
 }
 
+.loading {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
 .container-informacoes {
     display: flex;
     flex-direction: column;
