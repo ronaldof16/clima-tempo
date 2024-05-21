@@ -15,7 +15,9 @@ const Home = () => {
         setCidade(e.target.value); 
     }
 
-    async function buscaClima () {
+    async function buscaClima (e) {
+        e.preventDefault();
+
         if(cidade === "") {
             alert("É necessário informar uma cidade!");
             setCidade("");
@@ -32,7 +34,8 @@ const Home = () => {
                 temperatura: Math.round(info.main.temp),
                 descricao: info.weather[0].description,
                 humidade: info.main.humidity,
-                vento: Math.round(info.wind.speed)
+                vento: Math.round(info.wind.speed),
+                pais: `https://flagsapi.com/${info.sys.country}/flat/64.png`
             });
         } catch (e) {
             alert(e.message);         
@@ -46,10 +49,10 @@ const Home = () => {
     <div className='container'>
         <div className='container-pesquisa'>
             <p className='titulo-descricao'>Pesquise o clima de qualquer cidade</p>
-            <div className='pesquisa'>
+            <form className='pesquisa'>
                 <input type="text" value={cidade} onChange={handleChange} placeholder='Digite a cidade'/>
                 <button onClick={buscaClima}>Pesquisar</button>
-            </div>
+            </form>
         </div>
         
         {loading && <Loading />}
