@@ -10,7 +10,10 @@ const Sucess = ({ info }) => {
     
   return ( 
     <div className='container-informacoes'>
-        <h1>{info.nome}</h1>
+        <div className="container-titulo">
+            <h1 className="cidade-titulo">{info.nome}</h1>
+            <img className="cidade-img" src={info.pais} alt="Bandeira do país" />
+        </div>
         <div className='clima-info'>
             <img src={info.icone} alt="" /> 
             <p className='temperatura'>{info.temperatura}°C</p>
