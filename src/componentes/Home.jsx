@@ -10,6 +10,7 @@ const Home = () => {
     const [cidade, setCidade] = useState("");
     const [informacoes, setInformacoes] = useState({});
     const [loading, setLoading] = useState(false);
+    const [cidadesPesquisadas, setCidadesPesquisadas] = useState([]);
 
     function handleChange(e) {
         setCidade(e.target.value); 
@@ -17,6 +18,8 @@ const Home = () => {
 
     async function buscaClima (e) {
         e.preventDefault();
+        // handleChange(e)
+        // console.log(cidade)
 
         if(cidade === "") {
             alert("É necessário informar uma cidade!");
@@ -37,6 +40,8 @@ const Home = () => {
                 vento: Math.round(info.wind.speed),
                 pais: `https://flagsapi.com/${info.sys.country}/flat/64.png`
             });
+            const novasCidades = [cidade, ...cidadesPesquisadas].slice(0, 3)
+            setCidadesPesquisadas(novasCidades)
         } catch (e) {
             alert(e.message);         
         } finally {
@@ -57,6 +62,14 @@ const Home = () => {
         
         {loading && <Loading />}
         {Object.keys(informacoes).length > 0  && <Sucess info={informacoes} />}
+        {/* <div>
+            <button 
+                value={cidadesPesquisadas[2]}
+                onClick={buscaClima}
+                >
+                    {cidadesPesquisadas[2]}
+            </button>
+        </div> */}
     </div>
   )
 }
