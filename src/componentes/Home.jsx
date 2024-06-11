@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import "./Home.css";
 import {fetchWeatherFromCity} from "../api";
@@ -18,12 +18,11 @@ const Home = () => {
 
     async function buscaClima (e) {
         e.preventDefault();
-        // handleChange(e)
-        // console.log(cidade)
+        setCidade(e.target.value); 
+        console.log(cidade)
 
         if(cidade === "") {
             alert("É necessário informar uma cidade!");
-            setCidade("");
             return;
         }
 
@@ -50,6 +49,7 @@ const Home = () => {
         }
     }
 
+
   return (
     <div className='container'>
         <div className='container-pesquisa'>
@@ -62,14 +62,14 @@ const Home = () => {
         
         {loading && <Loading />}
         {Object.keys(informacoes).length > 0  && <Sucess info={informacoes} />}
-        {/* <div>
-            <button 
-                value={cidadesPesquisadas[2]}
-                onClick={buscaClima}
-                >
-                    {cidadesPesquisadas[2]}
-            </button>
-        </div> */}
+        <div className='div-ultimas-cidades'>
+            <h2>Últimas cidades pesquisadas</h2>
+            <div className='div-btn-cidades'>
+            {cidadesPesquisadas.map((cidade, index) => (
+                <button className='btn-cidade' key={index} value={cidade} onClick={buscaClima}>{cidade}</button>
+            ))}
+            </div>
+        </div>
     </div>
   )
 }
