@@ -42,6 +42,16 @@ const Home = () => {
             if(!cidadesPesquisadas.includes(cidadeInformada)) {
                 const novasCidades = [cidadeInformada, ...cidadesPesquisadas].slice(0, 3)
                 setCidadesPesquisadas(novasCidades)
+            } else {
+                const existeIndex = cidadesPesquisadas.indexOf(cidadeInformada);
+                if(existeIndex !== 0) {
+                    const atualizarCidadesPesquisadas = [
+                        cidadeInformada,
+                        ...cidadesPesquisadas.slice(0, existeIndex),
+                        ...cidadesPesquisadas.slice(existeIndex + 1)
+                    ];
+                    setCidadesPesquisadas(atualizarCidadesPesquisadas);
+                }
             };
         } catch (e) {
             alert(e.message);         
