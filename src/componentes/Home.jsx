@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import "./Home.css";
 import {fetchWeatherFromCity} from "../api";
@@ -16,12 +16,12 @@ const Home = () => {
         setCidade(e.target.value); 
     }
 
-    async function buscaClima (e) {
+    async function buscaClima (e, cidadeInformada) {
         e.preventDefault();
-        setCidade(e.target.value); 
+        setCidade(cidadeInformada); 
         console.log(cidade)
 
-        if(cidade === "") {
+        if(cidadeInformada === "") {
             alert("É necessário informar uma cidade!");
             return;
         }
@@ -29,7 +29,7 @@ const Home = () => {
         try {
             setLoading(true);
             setInformacoes({});
-            let info = await fetchWeatherFromCity(cidade);
+            let info = await fetchWeatherFromCity(cidadeInformada);
             setInformacoes({
                 nome: info.name,
                 icone: `https://openweathermap.org/img/wn/${info.weather[0].icon}@2x.png`,
@@ -39,8 +39,10 @@ const Home = () => {
                 vento: Math.round(info.wind.speed),
                 pais: `https://flagsapi.com/${info.sys.country}/flat/64.png`
             });
-            const novasCidades = [cidade, ...cidadesPesquisadas].slice(0, 3)
-            setCidadesPesquisadas(novasCidades)
+            if(!cidadesPesquisadas.includes(cidadeInformada)) {
+                const novasCidades = [cidadeInformada, ...cidadesPesquisadas].slice(0, 3)
+                setCidadesPesquisadas(novasCidades)
+            };
         } catch (e) {
             alert(e.message);         
         } finally {
@@ -55,8 +57,13 @@ const Home = () => {
         <div className='container-pesquisa'>
             <p className='titulo-descricao'>Pesquise o clima de qualquer cidade</p>
             <form className='pesquisa'>
-                <input type="text" value={cidade} onChange={handleChange} placeholder='Digite a cidade'/>
-                <button onClick={buscaClima}>Pesquisar</button>
+                <input 
+                    type="text" 
+                    value={cidade} 
+                    onChange={handleChange} 
+                    placeholder='Digite a cidade'
+                />
+                <button onClick={(e) => buscaClima(e, cidade)}>Pesquisar</button>
             </form>
         </div>
         
@@ -66,7 +73,13 @@ const Home = () => {
             <h2>Últimas cidades pesquisadas</h2>
             <div className='div-btn-cidades'>
             {cidadesPesquisadas.map((cidade, index) => (
-                <button className='btn-cidade' key={index} value={cidade} onClick={buscaClima}>{cidade}</button>
+                <button 
+                    className='btn-cidade' 
+                    key={index} value={cidade} 
+                    onClick={(e) => buscaClima(e, cidade)}
+                >
+                    {cidade}
+                </button>
             ))}
             </div>
         </div>
