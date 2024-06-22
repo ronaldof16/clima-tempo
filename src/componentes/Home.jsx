@@ -19,7 +19,6 @@ const Home = () => {
     async function buscaClima (e, cidadeInformada) {
         e.preventDefault();
         setCidade(cidadeInformada); 
-        console.log(cidade)
 
         if(cidadeInformada === "") {
             alert("É necessário informar uma cidade!");
@@ -73,24 +72,28 @@ const Home = () => {
                     onChange={handleChange} 
                     placeholder='Digite a cidade'
                 />
-                <button onClick={(e) => buscaClima(e, cidade)}>Pesquisar</button>
+                <button className='btn-pesquisa' onClick={(e) => buscaClima(e, cidade)}>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
             </form>
         </div>
         
         {loading && <Loading />}
-        {Object.keys(informacoes).length > 0  && <Sucess info={informacoes} />}
-        <div className='div-ultimas-cidades'>
-            <h2>Últimas cidades pesquisadas</h2>
-            <div className='div-btn-cidades'>
-            {cidadesPesquisadas.map((cidade, index) => (
-                <button 
-                    className='btn-cidade' 
-                    key={index} value={cidade} 
-                    onClick={(e) => buscaClima(e, cidade)}
-                >
-                    {cidade}
-                </button>
-            ))}
+        <div className='resultado'>
+            {Object.keys(informacoes).length > 0  && <Sucess info={informacoes} />}
+            <div className='div-ultimas-cidades'>
+                <h2>Últimas cidades pesquisadas</h2>
+                <div className='div-btn-cidades'>
+                    {cidadesPesquisadas.map((cidade, index) => (
+                        <button 
+                            className='btn-cidade' 
+                            key={index} value={cidade} 
+                            onClick={(e) => buscaClima(e, cidade)}
+                        >
+                            {cidade}
+                        </button>
+                    ))}
+                </div>
             </div>
         </div>
     </div>
