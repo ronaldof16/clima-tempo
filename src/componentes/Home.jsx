@@ -79,8 +79,7 @@ const Home = () => {
         </div>
         
         {loading && <Loading />}
-        <div className='resultado'>
-            {Object.keys(informacoes).length > 0  && <Sucess info={informacoes} />}
+        {Object.keys(informacoes).length > 0  && <Sucess info={informacoes} />}
             <div className='div-ultimas-cidades'>
                 <h2>Últimas cidades pesquisadas</h2>
                 <div className='div-btn-cidades'>
@@ -95,7 +94,6 @@ const Home = () => {
                     ))}
                 </div>
             </div>
-        </div>
     </div>
   )
 }
