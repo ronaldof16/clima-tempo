@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import {fetchWeatherFromCity} from "../api";
 
 import "./Home.css";
-import {fetchWeatherFromCity} from "../api";
+import UltimasCidades from './UltimasCidades';
+import Pesquisa from './Pesquisa';
 import Loading from './states/Loading';
 import Sucess from './states/Sucess';
 
@@ -63,37 +65,10 @@ const Home = () => {
 
   return (
     <div className='container'>
-        <div className='container-pesquisa'>
-            <p className='titulo-descricao'>Pesquise o clima de qualquer cidade</p>
-            <form className='pesquisa'>
-                <input 
-                    type="text" 
-                    value={cidade} 
-                    onChange={handleChange} 
-                    placeholder='Digite a cidade'
-                />
-                <button className='btn-pesquisa' onClick={(e) => buscaClima(e, cidade)}>
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-            </form>
-        </div>
-        
+        <Pesquisa cidade={cidade} buscaClima={buscaClima} handleChange={handleChange}/>
         {loading && <Loading />}
         {Object.keys(informacoes).length > 0  && <Sucess info={informacoes} />}
-            <div className='div-ultimas-cidades'>
-                <h2>Últimas cidades pesquisadas</h2>
-                <div className='div-btn-cidades'>
-                    {cidadesPesquisadas.map((cidade, index) => (
-                        <button 
-                            className='btn-cidade' 
-                            key={index} value={cidade} 
-                            onClick={(e) => buscaClima(e, cidade)}
-                        >
-                            {cidade}
-                        </button>
-                    ))}
-                </div>
-            </div>
+        {!loading && Object.keys(informacoes).length > 0 && <UltimasCidades cidadesPesquisadas={cidadesPesquisadas} buscaClima={buscaClima} />}
     </div>
   )
 }
