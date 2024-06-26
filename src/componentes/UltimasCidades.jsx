@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react';
 import './UltimasCidades.css';
 
 const UltimasCidades = ({ cidadesPesquisadas, buscaClima }) => {
+    
   return (
     <div className='div-ultimas-cidades'>
             <h2>Últimas cidades pesquisadas</h2>

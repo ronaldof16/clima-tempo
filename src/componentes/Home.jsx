@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {fetchWeatherFromCity} from "../api";
 
 import "./Home.css";
@@ -12,7 +12,7 @@ const Home = () => {
     const [cidade, setCidade] = useState("");
     const [informacoes, setInformacoes] = useState({});
     const [loading, setLoading] = useState(false);
-    const [cidadesPesquisadas, setCidadesPesquisadas] = useState([]);
+    const [cidadesPesquisadas, setCidadesPesquisadas] = useState(JSON.parse(localStorage.getItem('itens')) || []);
 
     function handleChange(e) {
         setCidade(e.target.value); 
@@ -54,6 +54,7 @@ const Home = () => {
                     setCidadesPesquisadas(atualizarCidadesPesquisadas);
                 }
             };
+            localStorage.setItem('itens', JSON.stringify(cidadesPesquisadas));
         } catch (e) {
             alert(e.message);         
         } finally {
@@ -62,15 +63,19 @@ const Home = () => {
         }
     }
 
+    useEffect(() => {
+
+    }, []);
+
 
   return (
     <div className='container'>
         <Pesquisa cidade={cidade} buscaClima={buscaClima} handleChange={handleChange}/>
         {loading && <Loading />}
         {Object.keys(informacoes).length > 0  && <Sucess info={informacoes} />}
-        {!loading && Object.keys(informacoes).length > 0 && <UltimasCidades cidadesPesquisadas={cidadesPesquisadas} buscaClima={buscaClima} />}
+        {!loading && cidadesPesquisadas.length > 0 && <UltimasCidades cidadesPesquisadas={cidadesPesquisadas} buscaClima={buscaClima} />}
     </div>
   )
 }
 
-export default Home
+export default Home;
